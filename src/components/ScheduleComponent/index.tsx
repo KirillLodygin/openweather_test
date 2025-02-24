@@ -1,6 +1,6 @@
 import React, { FC, useState } from 'react'
 import { observer } from 'mobx-react-lite'
-import {DataObject} from '../../utils/transformData'
+import { DataObject } from '../../utils/transformData'
 import { aggregateByDay } from '../../utils/aggregateByDay'
 import { CheckboxContainer, Checkbox, Label, CheckboxWrapp, RadioButtonGroup, RadioButton } from './styled'
 import ScheduleBlock from '../ScheduleBlock'
@@ -9,7 +9,7 @@ interface IScheduleComponent {
   rawData: DataObject[]
 }
 
-const ScheduleComponent: FC<IScheduleComponent> = ({rawData}) => {
+const ScheduleComponent: FC<IScheduleComponent> = ({ rawData }) => {
   const [timeRange, setTimeRange] = useState('3hours')
   const [visibleLines, setVisibleLines] = useState({
     temp: true,
@@ -37,8 +37,7 @@ const ScheduleComponent: FC<IScheduleComponent> = ({rawData}) => {
 
   const visibleKeys = Object.keys(visibleLines).filter((key) => visibleLines[key as keyof typeof visibleLines])
 
-  const lines = visibleKeys
-    .filter((key) => key !== 'name' && key !== 'city')
+  const lines = visibleKeys.filter((key) => key !== 'name' && key !== 'city')
 
   return (
     <CheckboxContainer>
@@ -66,7 +65,6 @@ const ScheduleComponent: FC<IScheduleComponent> = ({rawData}) => {
       </RadioButtonGroup>
 
       <ScheduleBlock data={data} arrForLines={lines} />
-
     </CheckboxContainer>
   )
 }
