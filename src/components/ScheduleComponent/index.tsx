@@ -1,11 +1,9 @@
 import React, { FC, useState } from 'react'
 import { observer } from 'mobx-react-lite'
-import { ResponsiveContainer, LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend } from 'recharts'
 import {DataObject} from '../../utils/transformData'
 import { aggregateByDay } from '../../utils/aggregateByDay'
-import chroma from 'chroma-js'
 import { CheckboxContainer, Checkbox, Label, CheckboxWrapp, RadioButtonGroup, RadioButton } from './styled'
-import CustomTooltip from '../CustomTooltip'
+import ScheduleBlock from '../ScheduleBlock'
 
 interface IScheduleComponent {
   rawData: DataObject[]
@@ -21,8 +19,6 @@ const ScheduleComponent: FC<IScheduleComponent> = ({rawData}) => {
   })
 
   let data = [...rawData]
-
-  const colorScale = chroma.scale(['#ff0000', '#00ff00', '#0000ff']).mode('lch').colors(Object.keys(data[0]).length)
 
   if (timeRange === 'day') {
     data = aggregateByDay(rawData)
@@ -43,9 +39,6 @@ const ScheduleComponent: FC<IScheduleComponent> = ({rawData}) => {
 
   const lines = visibleKeys
     .filter((key) => key !== 'name' && key !== 'city')
-    .map((key, index) => (
-      <Line key={`line-${key}`} type="monotone" dataKey={key} stroke={colorScale[index]} activeDot={{ r: 8 }} />
-    ))
 
   return (
     <CheckboxContainer>
@@ -72,16 +65,8 @@ const ScheduleComponent: FC<IScheduleComponent> = ({rawData}) => {
         </RadioButton>
       </RadioButtonGroup>
 
-      <ResponsiveContainer width={1050} height={600}>
-        <LineChart width={700} height={600} data={data}>
-          <XAxis dataKey="name" domain={['auto', 'auto']} />
-          <YAxis domain={['auto', 'auto']} />
-          <CartesianGrid strokeDasharray="3 3" />
-          <Tooltip content={<CustomTooltip />} />
-          <Legend />
-          {lines}
-        </LineChart>
-      </ResponsiveContainer>
+      <ScheduleBlock data={data} arrForLines={lines} />
+
     </CheckboxContainer>
   )
 }
